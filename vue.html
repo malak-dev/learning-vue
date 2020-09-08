@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+  integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+<style>
+  [v-clock] {
+    display: none;
+  }
+</style>
+
+<div id="app">
+  <div class="container">
+    <!-- <form v-show="!submitted" class="mt-5">
+      <div class="form-group">
+        <label for="email"> Email</label>
+        <input type="email" v-model="email" class="form-control-1g">
+      </div>
+      <button type="submit" @click.prevent="process" class="btn btn-primary">submit </button>
+    </form>
+    <h1 v-show="submitted" v-clock> thanks for signing up</h1> -->
+    <!-- <img :src="imgSrc" :title="imgTitle"> -->
+
+    <div class="card mt-5">
+      <h2 class="card-header">near earth object </h2>
+      <table class="table">
+        <thead>
+          <th>Name</th>
+          <th>close approach date</th>
+        </thead>
+        <tbody v-clock>
+          <tr v-for="a in asteroids">
+            <td>{{a.name}}</td>
+            <td>{{getCloseApproachDate(a)}}</td>
+          </tr>
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+<script>
+  var vm = new Vue({
+    el: '#app',
+    data: {
+      // email: 'malak-y@live.com',
+      // submitted: false
+      // imgSrc: "",
+      // imgTitle: ""
+      asteroids: []
+    },
+    created: function () {
+      // this.fetchpods();
+      this.fetchAsteroids();
+    },
+    methods: {
+      // process: function () {
+      //   this.submitted = true
+      // fetchpods: function () {
+      //   var apikey = '9Jcwa3csaD6pV8mBECgnJMu5voeWjm0bW1LjFLB7';
+      //   var url = 'https://api.nasa.gov/planetary/apod?api_key=' + apikey;
+      //   axios.get(url)
+      //     .then(function (res) {
+      //       vm.imgSrc = res.data.url;
+      //       vm.imgTitle = res.data.title;
+      //     })
+      // }
+      fetchAsteroids: function () {
+        var apikey = '9Jcwa3csaD6pV8mBECgnJMu5voeWjm0bW1LjFLB7';
+        var url = 'https://api.nasa.gov/neo/rest/v1/neo/browse?api_key=' + apikey;
+        axios.get(url)
+          .then(function (res) {
+            vm.asteroids = res.data.near_earth_objects.slice(0, 10)
+            console.log(res.data)
+          })
+
+      },
+      getCloseApproachDate: function (a) {
+        if (a.close_approach_data.length > 0) {
+          return a.close_approach_data[0].close_approach_date;
+        }
+        return 'n/a'
+      }
+    }
+  });
+
+</script>
+
+<!-- 
+  v-on:= @ 
+  v-show is similar to v-if /v-else but it doesn't hidden in the dom  
+  v-clock is an attribute we should use square brackets with it to add a css 
+  v-bind=:
+-->
